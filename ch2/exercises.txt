@@ -1,0 +1,14 @@
+False :: Bool
+
+(["foo", "bar"], 'a') :: ([[Char]], Char)
+
+[(True, []), (False, [['a']])] :: [(Bool, [[Char]])]
+
+last :: [a] -> a
+
+     We could return any element of the list (and still be
+     well-typed). We will get back *some* element of the list, though
+     -- without more knowledge of the type a, we can't apply any
+     functions to the elements of the list.
+
+
