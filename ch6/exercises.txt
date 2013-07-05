@@ -1,0 +1,6 @@
+-- Not that I totally understand arrows, but in the context of
+-- function application second takes a function and a pair and returns
+-- a new pair with the function applied to the second element.
+
+-- The type of (,) is a -> b -> (a, b). It's a constructor of pairs,
+-- and so (,,) is a constructor of triples.
