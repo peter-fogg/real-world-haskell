@@ -36,13 +36,16 @@ parsePattern ('?':ps)    = fmap (Question:) (parsePattern ps)
 parsePattern ('\\':c:ps) = fmap (\ p -> (Char c):p) (parsePattern ps)
 parsePattern ('[':c:ps)  = case c of
   ']' -> Left "char class must contain characters"
-  '^' -> case parseCharClass ps of -- There is almost certainly a neater way
-    Left err          -> Left err  -- to do this, but I don't know it.
-    Right (cls, rest) -> fmap (\ p -> (ExcludeClass cls):p) $ parsePattern rest
-  c   -> case parseCharClass (c:ps) of
-    Left err          -> Left err
-    Right (cls, rest) -> fmap (\ p -> (IncludeClass cls):p) $ parsePattern rest
+  '^' -> getPat ExcludeClass ps
+  c   -> getPat IncludeClass (c:ps)
 parsePattern (c:ps)      = fmap ((Char c):) (parsePattern ps)
+
+-- Worst names ever...
+getPat :: (String -> Pattern) -> String -> Either GlobError [Pattern]
+getPat pat s = do
+  (cls, rest) <- parseCharClass s
+  p <- parsePattern rest
+  return $ (pat cls):p
 
 parseCharClass :: String -> Either GlobError (String, String)
 parseCharClass []       = Left "unterminated char class"
