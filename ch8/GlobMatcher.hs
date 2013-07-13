@@ -39,6 +39,7 @@ parsePattern ('[':c:ps)  = case c of
   '^' -> getPat ExcludeClass ps
   c   -> getPat IncludeClass (c:ps)
 parsePattern (c:ps)      = fmap ((Char c):) (parsePattern ps)
+parsePattern _           = Left "parsing error"
 
 -- Worst names ever...
 getPat :: (String -> Pattern) -> String -> Either GlobError [Pattern]
